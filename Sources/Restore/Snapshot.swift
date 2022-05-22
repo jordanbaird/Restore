@@ -19,6 +19,8 @@ public struct Snapshot<Object: RestorableObject>: AnySnapshot {
   
   private var storage = [UInt64: (String, Any)]()
   
+  private let object: Object
+  
   var allProperties: [(String, Any)] {
     .init(storage.values)
   }
@@ -26,6 +28,7 @@ public struct Snapshot<Object: RestorableObject>: AnySnapshot {
   // MARK: - Initializers
   
   init(for object: Object) {
+    self.object = object
     for (var name, wrapper) in object.restorableProperties {
       name.removeFirst()
       storage[wrapper.key] = (name, wrapper.value)
@@ -49,11 +52,31 @@ public struct Snapshot<Object: RestorableObject>: AnySnapshot {
         var key = $0.key
         key.removeFirst()
         return key
+  func restore() {
+    for (_, wrapper) in object.restorableProperties {
+      if let value = storage[wrapper.key]?.1 {
+        wrapper.value = value
       }
       return nil
     }
     guard invalidKeys.isEmpty else {
       throw RestorationError.noValues(forProperies: invalidKeys)
+    for property in allProperties {
+      if let property = property.1 as? Restorable<Reference<Object>> {
+        property.wrappedValue.restore()
+      }
     }
+  }
+  
+  func restore<T>(_ keyPath: KeyPath<Object, Restorable<T>>) {
+    let property = object[keyPath: keyPath]
+    guard
+      let wrapper = object.wrappers.first(where: { $0.key == property.key }),
+      let value = storage[wrapper.key]?.1
+    else {
+      assertionFailure("No valid property is stored for key \(property.key).")
+      return
+    }
+    wrapper.value = value
   }
 }

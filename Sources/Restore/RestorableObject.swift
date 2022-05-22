@@ -16,6 +16,8 @@ var storage = [Identifier: [RestorationKey: AnySnapshot]]()
 public protocol RestorableObject where ReferenceType.Object == Self {
   /// The type of reference object associated with the current type.
   associatedtype ReferenceType: AnyReference = Reference<Self>
+  /// A valid key path for restoration.
+  typealias RestorableKeyPath<T> = KeyPath<Self, Restorable<T>>
   
   /// An identifier for the instance.
   ///
@@ -112,18 +114,8 @@ extension RestorableObject {
   
   /// Restores all the ``Restorable``-wrapped properties of an instance to the
   /// values they contained when the given snapshot was taken.
-  public func restore(from snapshot: Snapshot<Self>) throws {
-    try validate(snapshot: snapshot)
-    for (_, wrapper) in restorableProperties {
-      if let value = snapshot.getSingleValue(forWrapper: wrapper) {
-        wrapper.value = value
-      }
-    }
-    for property in snapshot.allProperties {
-      if let property = property.1 as? Restorable<Reference<Self>> {
-        property.wrappedValue.restore()
-      }
-    }
+  public func restore(from snapshot: Snapshot<Self>) {
+    snapshot.restore()
   }
   
   /// Restores all the ``Restorable``-wrapped properties of an instance to the
@@ -132,7 +124,7 @@ extension RestorableObject {
     guard let snapshot = snapshots[key] as? Snapshot<Self> else {
       throw RestorationError.noSnapshot(forKey: key)
     }
-    try restore(from: snapshot)
+    restore(from: snapshot)
   }
   
   /// Restores the property at the given keypath to the value that it contained
@@ -145,16 +137,8 @@ extension RestorableObject {
   /// ```swift
   /// try someObject.restore(\.$someValue, from: someSnapshot)
   /// ```
-  public func restore<T>(_ property: KeyPath<Self, Restorable<T>>, from snapshot: Snapshot<Self>) throws {
-    try validate(snapshot: snapshot)
-    let property = self[keyPath: property]
-    guard
-      let wrapper = wrappers.first(where: { $0.key == property.key }),
-      let value = snapshot.getSingleValue(forWrapper: wrapper)
-    else {
-      throw RestorationError.unknownProperty
-    }
-    wrapper.value = value
+  public func restore<T>(_ property: RestorableKeyPath<T>, from snapshot: Snapshot<Self>) throws {
+    snapshot.restore(property)
   }
   
   /// Restores the property at the given keypath to the value that it contained
@@ -167,7 +151,7 @@ extension RestorableObject {
   /// ```swift
   /// try someObject.restore(\.$someValue, withKey: "SomeKey")
   /// ```
-  public func restore<T>(_ property: KeyPath<Self, Restorable<T>>, withKey key: RestorationKey) throws {
+  public func restore<T>(_ property: RestorableKeyPath<T>, withKey key: RestorationKey) throws {
     guard let snapshot = snapshots[key] as? Snapshot<Self> else {
       throw RestorationError.noSnapshot(forKey: key)
     }
@@ -175,8 +159,7 @@ extension RestorableObject {
   }
   
   /// Returns the properties contained by the given snapshot.
-  public func properties(of snapshot: Snapshot<Self>) throws -> Properties<Self> {
-    try validate(snapshot: snapshot)
+  public func properties(of snapshot: Snapshot<Self>) -> Properties<Self> {
     return .init(snapshot)
   }
   
@@ -185,7 +168,7 @@ extension RestorableObject {
     guard let snapshot = snapshots[key] as? Snapshot<Self> else {
       throw RestorationError.noSnapshot(forKey: key)
     }
-    return try properties(of: snapshot)
+    return properties(of: snapshot)
   }
   
   /// Removes the snapshot with the given key.
@@ -196,9 +179,5 @@ extension RestorableObject {
   /// Removes all snapshots stored by the instance.
   public func removeLocalSnapshots() {
     snapshots.removeAll()
-  }
-  
-  func validate(snapshot: Snapshot<Self>) throws {
-    try snapshot.validate(properties: restorableProperties)
   }
 }
