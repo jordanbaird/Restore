@@ -162,15 +162,19 @@ final class RestorableTests: XCTestCase {
   func testNoSnapshot() throws {
     let mock = RestorableMock1()
     XCTAssertThrowsError(try mock.restore(withKey: "SomeKey"))
+    XCTAssertThrowsError(try mock.restore(\.$value1, withKey: "SomeKey"))
+  }
+  
+  func testNoProperties() throws {
+    let mock = RestorableMock1()
+    XCTAssertThrowsError(try mock.properties(withKey: "SomeKey"))
   }
   
   func testNoValues() throws {
-    let mock = RestorableMock1()
-    let snapshot = mock.takeSnapshot()
-    var properties = mock.restorableProperties
-    @Restorable var unstoredProperty = "Foo"
-    properties["unstoredProperty"] = $unstoredProperty
-    XCTAssertThrowsError(try snapshot.validate(properties: properties))
+    let mock1 = RestorableMock1()
+    let mock2 = RestorableMock1()
+    mock1.takeSnapshot(withKey: "SomeKey")
+    XCTAssertThrowsError(try mock2.restore(withKey: "SomeKey"))
   }
   
   func testRestorationKey() {
