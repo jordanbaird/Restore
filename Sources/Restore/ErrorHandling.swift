@@ -26,13 +26,7 @@ struct RestorationError: GeneralError {
 }
 
 extension RestorationError {
-  static let unknownProperty = Self("Unknown property. Cannot restore value.")
-  
-  static func noValues(forProperies properties: [String]) -> Self {
-    .init("No stored values exist for properties \"\(properties)\".")
-  }
-  
   static func noSnapshot(forKey key: RestorationKey) -> Self {
-    .init("No snapshot exists for key \"\(key.rawValue)\".")
+    .init("No snapshot exists for key \(key.rawValue).")
   }
 }

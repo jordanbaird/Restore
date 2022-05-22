@@ -41,26 +41,12 @@ public struct Snapshot<Object: RestorableObject>: AnySnapshot {
   
   // MARK: - Methods
   
-  func getSingleValue(forWrapper wrapper: RestorableWrapper) -> Any? {
-    storage[wrapper.key]?.1
-  }
-  
-  func validate(properties: [String: RestorableWrapper]) throws {
-    let invalidKeys: [String] = properties.compactMap {
-      let wrapper = $0.value
-      if storage[wrapper.key] == nil {
-        var key = $0.key
-        key.removeFirst()
-        return key
   func restore() {
     for (_, wrapper) in object.restorableProperties {
       if let value = storage[wrapper.key]?.1 {
         wrapper.value = value
       }
-      return nil
     }
-    guard invalidKeys.isEmpty else {
-      throw RestorationError.noValues(forProperies: invalidKeys)
     for property in allProperties {
       if let property = property.1 as? Restorable<Reference<Object>> {
         property.wrappedValue.restore()
