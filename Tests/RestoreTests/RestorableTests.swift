@@ -189,9 +189,20 @@ final class RestorableTests: XCTestCase {
     let mock = RestorableMock1()
     mock.takeSnapshot(withKey: "SomeKey")
     let properties = try mock.properties(withKey: "SomeKey")
+    mock.value1 = "Bar"
     let v1: String? = properties.value1
-    let v2: String? = properties["value1"]
-    XCTAssertEqual(v1, v2)
+    XCTAssertNotEqual(v1, mock.value1)
+  }
+  
+  func testPropertiesDynamicLookup() throws {
+    let mock = RestorableMock1()
+    mock.takeSnapshot(withKey: "SomeKey")
+    let properties = try mock.properties(withKey: "SomeKey")
+    mock.value1 = "Bar"
+    let shouldBeNil: Bool? = properties.value1
+    XCTAssertNil(shouldBeNil)
+    let shouldNotBeNil: String? = properties.value1
+    XCTAssertNotNil(shouldNotBeNil)
   }
   
   func testNested() {
