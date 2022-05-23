@@ -18,8 +18,7 @@ public struct Snapshot<Object: RestorableObject>: AnySnapshot {
   // MARK: - Properties
   
   private var storage = [UInt64: (String, Any)]()
-  
-  private let object: Object
+  let object: Object
   
   var allProperties: [(String, Any)] {
     .init(storage.values)
