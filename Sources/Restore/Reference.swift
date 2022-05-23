@@ -54,7 +54,6 @@ public struct Reference<Object: RestorableObject>: AnyReference {
       }
       owner[keyPath: keyPath] = originalValue
     }
-    validate()
   }
   
   /// Creates a reference from the given owner and key path.
@@ -68,12 +67,6 @@ public struct Reference<Object: RestorableObject>: AnyReference {
       name: name,
       originalValue: owner[keyPath: keyPath],
       keyPath: keyPath)
-  }
-  
-  func validate() {
-    let children = Mirror(reflecting: owner).children
-    let msg = #"Type "\#(type(of: owner))" does not contain a property named "\#(name)"."#
-    assert(children.contains { $0.label == name }, msg)
   }
 }
 
