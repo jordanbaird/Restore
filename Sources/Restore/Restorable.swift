@@ -15,8 +15,8 @@ protocol RestorableWrapper: CustomStringConvertible, CustomDebugStringConvertibl
 
 // MARK: - Restorable
 
-/// A property wrapper type that enables the value it wraps to be included as part of snapshots
-/// taken by instances of ``RestorableObject`` types.
+/// A property wrapper type that enables the value it wraps to be included as
+/// part of snapshots taken by instances of ``RestorableObject`` types.
 @propertyWrapper
 public struct Restorable<Value>: RestorableWrapper {
   
@@ -96,12 +96,6 @@ public struct Restorable<Value>: RestorableWrapper {
   
   init(value: Value) {
     self.init(state: .init(value))
-  }
-  
-  init<Object: RestorableObject>(
-    reference: Reference<Object>
-  ) where Value == Reference<Object> {
-    self.init(value: reference)
   }
   
   /// Creates a wrapper that wraps the given value.

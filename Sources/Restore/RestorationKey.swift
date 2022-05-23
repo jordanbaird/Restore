@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 /// A type that is used as a key to store values in a snapshot.
+///
+/// This type can be initialized as a string literal, which is preferred.
 public struct RestorationKey {
   
   // MARK: - Properties

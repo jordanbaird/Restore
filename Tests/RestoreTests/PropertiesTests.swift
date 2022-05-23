@@ -15,10 +15,20 @@ final class PropertiesTests: XCTestCase {
     @Restorable var value2 = "Bar"
     @Restorable var value3 = 10000
     @Restorable var value4: Bool? = false
-    var value5 = 3.14
-    var references: [Reference<Mock>] {
-      Reference(owner: self, name: "value5", keyPath: \.value5)
+    private var _value5 = 3.14
+    var value5: Double {
+      get { _value5 }
+      set { _value5 = newValue }
     }
+    var references: [Reference<Mock>] {
+      Reference(object: self, name: "value5", keyPath: \.value5)
+    }
+  }
+  
+  func testSomething() {
+    let mock = Mock()
+    let children = Mirror(reflecting: mock).children
+    print(children.map { ($0.label, $0.value) })
   }
   
   func testCreateFromSnapshot() {

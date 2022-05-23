@@ -17,25 +17,22 @@ public struct Snapshot<Object: RestorableObject>: AnySnapshot {
   
   // MARK: - Properties
   
-  private var storage = [UInt64: (String, Any)]()
   let object: Object
-  
-  var allProperties: [(String, Any)] {
-    .init(storage.values)
-  }
+  let storage: [UInt64: (String, Any)]
   
   // MARK: - Initializers
   
   init(for object: Object) {
     self.object = object
+    var storage = [UInt64: (String, Any)]()
     for (var name, wrapper) in object.restorableProperties {
       name.removeFirst()
       storage[wrapper.key] = (name, wrapper.value)
     }
     for reference in object.trueReferences {
-      let wrapper = Restorable(reference: reference)
-      storage[wrapper.key] = (reference.name, wrapper)
+      storage[.random(in: UInt64.min...UInt64.max)] = (reference.name, reference)
     }
+    self.storage = storage
   }
   
   // MARK: - Methods
@@ -46,9 +43,9 @@ public struct Snapshot<Object: RestorableObject>: AnySnapshot {
         wrapper.value = value
       }
     }
-    for property in allProperties {
-      if let property = property.1 as? Restorable<Reference<Object>> {
-        property.wrappedValue.restore()
+    for value in storage.values {
+      if let reference = value.1 as? Reference<Object> {
+        reference.restore()
       }
     }
   }

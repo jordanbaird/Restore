@@ -33,39 +33,40 @@ public protocol AnyReference {
 /// you need to, for example, include computed properties in snapshots, as
 /// computed properties do not support property wrappers.
 public struct Reference<Object: RestorableObject>: AnyReference {
+  
+  // MARK: - Properties
+  
   let name: String
   let originalValue: Any
-  let owner: Object
   let restore: () -> Void
   
+  // MARK: - Initializers
+  
   init<Value>(
-    owner: Object,
+    object: Object,
     name: String,
-    originalValue: Any,
+    originalValue: Value,
     keyPath: ReferenceWritableKeyPath<Object, Value>
   ) {
     self.name = name
     self.originalValue = originalValue
-    self.owner = owner
     restore = {
-      guard let originalValue = originalValue as? Value else {
-        assertionFailure("Value is not of type \(Value.self). Cannot restore.")
-        return
-      }
-      owner[keyPath: keyPath] = originalValue
+      object[keyPath: keyPath] = originalValue
     }
   }
   
-  /// Creates a reference from the given owner and key path.
+  /// Creates a reference from the given owner, name and key path.
+  /// - Important: The `name` parameter _must_ have the same name as the property you
+  /// are referencing, or the value will not be stored.
   public init<Value>(
-    owner: Object,
+    object: Object,
     name: String,
     keyPath: ReferenceWritableKeyPath<Object, Value>
   ) {
     self.init(
-      owner: owner,
+      object: object,
       name: name,
-      originalValue: owner[keyPath: keyPath],
+      originalValue: object[keyPath: keyPath],
       keyPath: keyPath)
   }
 }

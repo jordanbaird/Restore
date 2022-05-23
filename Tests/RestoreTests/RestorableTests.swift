@@ -15,7 +15,7 @@ final class RestorableTests: XCTestCase {
     @Restorable var value2: Int? = 100
     var value3 = true
     var references: [Reference<RestorableMock1>] {
-      Reference(owner: self, name: "value3", keyPath: \.value3)
+      Reference(object: self, name: "value3", keyPath: \.value3)
     }
   }
   
