@@ -14,32 +14,31 @@
 /// that belong to the object associated with an instance will be returned.
 @dynamicMemberLookup
 public struct Properties<Object: RestorableObject> {
+  private let object: Object
   private let properties: [String: Any]
   
   init(_ snapshot: Snapshot<Object>) {
-    properties = snapshot.allProperties.reduce(into: [:]) {
-      $0[$1.0] = $1.1
-    }
-    print(properties)
+    object = snapshot.object
+    properties = snapshot.allProperties.reduce(into: [:]) { $0[$1.0] = $1.1 }
   }
   
-  /// Retrieves the property with the given label, assuming one exists as a member of the object.
-  public func property<T>(withLabel label: String) -> T? {
-    let property = properties[label]
+  func _member<Value>(withName name: String) -> Value? {
+    let property = properties[name]
     if let property = property as? Restorable<Reference<Object>> {
-      return property.wrappedValue.originalValue as? T
+      return property.wrappedValue.originalValue as? Value
     }
-    return property as? T
+    return property as? Value
   }
   
-  /// Retrieves the property with the given label, assuming one exists as a member of the object.
-  public subscript<T>(label: String) -> T? {
-    property(withLabel: label)
+  subscript<Value>(dynamicMember member: String) -> Value? {
+    _member(withName: member)
   }
   
-  /// Dynamically retrieves the property with the given label, assuming one exists as a member of
-  /// the object.
-  public subscript<T>(dynamicMember member: String) -> T? {
-    property(withLabel: member)
+  // Including this subscript, but making it unavailable convinces the IDE to
+  // show autocomplete suggestions for `Object`. As an additional benefit, it
+  // prevents invalid values from being passed to the true subscript, above.
+  @available(*, unavailable, message: "specify an Optional return type.")
+  subscript<Value>(dynamicMember member: KeyPath<Object, Value>) -> Value {
+    fatalError("subscript(dynamicMember:) is unavailable.")
   }
 }
