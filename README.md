@@ -1,6 +1,7 @@
 <div align='center'>
     <img src='/media/header.svg'>
     <h2>Take a snapshot of an object and restore from it.</h2>
+    <br/>
 </div>
 
 ![Build](https://img.shields.io/github/workflow/status/jordanbaird/Restore/Build)
