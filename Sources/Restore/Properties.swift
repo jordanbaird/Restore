@@ -6,7 +6,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// A container for the restorable properties owned by an instance of a ``RestorableObject`` type.
+/// A container for the restorable properties owned by an instance of a
+/// ``RestorableObject`` type.
+///
+/// This type dynamically looks up its members, and is completely type safe. It
+/// will not allow invalid values to be accessed, ensuring that only those values
+/// that belong to the object associated with an instance will be returned.
 @dynamicMemberLookup
 public struct Properties<Object: RestorableObject> {
   private let properties: [String: Any]
