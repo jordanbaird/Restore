@@ -13,19 +13,14 @@
 /// constant in order to be sure that the value consistently functions as a
 /// unique identifier.
 public struct Identifier {
-  
-  // MARK: Properties
-  
   let rawValue: String
   
-  // MARK: - Initializers
-  
-  init(_rawValue: String) {
-    rawValue = _rawValue
+  init(_raw: Any) {
+    rawValue = "\(_raw)"
   }
   
   init<Object: AnyObject>(for object: Object) {
-    self.init(_rawValue: "\(ObjectIdentifier(object))")
+    self.init(_raw: ObjectIdentifier(object))
   }
   
   /// Creates an identifier with a random value.
@@ -33,8 +28,8 @@ public struct Identifier {
   /// When creating a value using this initializer, it should be made a `let`
   /// constant in order to be sure that the value consistently functions as a
   /// unique identifier.
-  public init() {
-    self.init(_rawValue: "\(UInt64.random(in: UInt64.min...UInt64.max))")
+  init() {
+    self.init(_raw: UInt64.random())
   }
 }
 
