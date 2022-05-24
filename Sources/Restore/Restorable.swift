@@ -9,7 +9,7 @@
 // MARK: - RestorableWrapper
 
 protocol RestorableWrapper: CustomStringConvertible, CustomDebugStringConvertible {
-  var key: UInt64 { get }
+  var identifier: ObjectIdentifier { get }
   var value: Any { get nonmutating set }
 }
 
@@ -23,8 +23,8 @@ public struct Restorable<Value>: RestorableWrapper {
   // MARK: - Nested Types
   
   class ManagedState {
-    let key = UInt64.random(in: UInt64.min...UInt64.max)
     var value: Value
+    var identifier: ObjectIdentifier { .init(self) }
     init(_ value: Value) {
       self.value = value
     }
@@ -54,8 +54,8 @@ public struct Restorable<Value>: RestorableWrapper {
     "\(Self.self)(wrappedValue: \(wrappedValue))"
   }
   
-  var key: UInt64 {
-    state.key
+  var identifier: ObjectIdentifier {
+    state.identifier
   }
   
   /// The wrapper, projected.
