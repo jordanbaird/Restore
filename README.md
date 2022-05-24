@@ -12,7 +12,9 @@
 
 [Read the full documentation here](https://jordanbaird.github.io/Restore/documentation/restore/)
 
-``Restore`` is a convenient, easy to use package that allows you to snapshot the state of an object for later restoration. Start by creating a type that conforms to the ``RestorableObject`` protocol, and decorating the properties you wish to include in snapshots with the ``Restorable`` property wrapper.
+``Restore`` is a convenient, easy to use package that allows you to take a snapshot of an object, and restore the object to the state it was in when the snapshot was taken. 
+
+Start by creating a type that conforms to the ``RestorableObject`` protocol, and decorating the properties you wish to include in snapshots with the ``Restorable`` property wrapper.
 
 ```swift
 class FavoriteFruits: RestorableObject {
@@ -84,3 +86,11 @@ class FavoriteFruits: RestorableObject {
 ```
 
 > The `name` parameter in the ``Reference`` type's initializer must be the same as the name of the property, or the property will not be saved.
+
+You can also access individual properties from a snapshot.
+
+```swift
+let properties = try favorites.properties(withKey: "BackupResults")
+print(properties.rank1)
+// Prints: "Apple"
+```
