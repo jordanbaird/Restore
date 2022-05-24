@@ -22,7 +22,8 @@ public struct Properties<Object: RestorableObject> {
   
   // MARK: - Initializers
   
-  init(_ snapshot: Snapshot<Object>) {
+  /// Creates properties from the given snapshot.
+  public init(_ snapshot: Snapshot<Object>) {
     object = snapshot.object
     properties = snapshot.storage.values.reduce(into: [:]) { $0[$1.0] = $1.1 }
   }
@@ -39,7 +40,7 @@ public struct Properties<Object: RestorableObject> {
   
   // MARK: - Subscripts
   
-  subscript<Value>(dynamicMember member: String) -> Value? {
+  public subscript<Value>(dynamicMember member: String) -> Value? {
     _member(withName: member)
   }
   
@@ -47,7 +48,7 @@ public struct Properties<Object: RestorableObject> {
   // autocomplete suggestions for `Object`'s properties. As an additional benefit,
   // it prevents invalid values from being passed to the true subscript, above.
   @available(*, unavailable, message: "specify an Optional return type.")
-  subscript<Value>(dynamicMember member: KeyPath<Object, Value>) -> Value {
+  public subscript<Value>(dynamicMember member: KeyPath<Object, Value>) -> Value {
     fatalError("subscript(dynamicMember:) is unavailable.")
   }
 }
