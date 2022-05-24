@@ -51,7 +51,7 @@ public protocol RestorableObject where ReferenceType.Object == Self {
 }
 
 extension RestorableObject where Self: AnyObject {
-  var restorableObjectIdentifier: Identifier {
+  public var restorableObjectIdentifier: Identifier {
     .init(for: self)
   }
 }
