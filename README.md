@@ -12,9 +12,9 @@
 
 [Read the full documentation here](https://jordanbaird.github.io/Restore/documentation/restore/)
 
-``Restore`` is a convenient, easy to use package that allows you to take a snapshot of an object, and restore the object to the state it was in when the snapshot was taken. 
+`Restore` is a convenient, easy to use package that allows you to take a snapshot of an object, and restore the object to the state it was in when the snapshot was taken. 
 
-Start by creating a type that conforms to the ``RestorableObject`` protocol, and decorating the properties you wish to include in snapshots with the ``Restorable`` property wrapper.
+Start by creating a type that conforms to the `RestorableObject` protocol, and decorating the properties you wish to include in snapshots with the `Restorable` attribute.
 
 ```swift
 class FavoriteFruits: RestorableObject {
@@ -25,7 +25,7 @@ class FavoriteFruits: RestorableObject {
 let favorites = FavoriteFruits()
 ```
 
-Let's say that somewhere down the line, "Banana" overtakes "Apple", moving into `rank1`. As an extra precaution, the judges want to save the current results in case a mistake was made. They do so using the ``RestorableObject/takeSnapshot(withKey:)`` method. Now they are free to update the results.
+Let's say that somewhere down the line, "Banana" overtakes "Apple", moving into `rank1`. As an extra precaution, the judges want to save the current results in case a mistake was made. They do so using the `takeSnapshot(withKey:)` method. Now they are free to update the results.
 
 ```swift
 favorites.takeSnapshot(withKey: "BackupResults")
@@ -34,7 +34,7 @@ favorites.rank1 = "Banana"
 favorites.rank2 = "Apple"
 ```
 
-Later, they find out that a mistake was indeed made. The vote was miscounted, and the results are now invalid. Thankfully, they have the backup. Rather than having to go through each individual property and set their values back to their original states, they can simply call the ``RestorableObject/restore(withKey:)`` method. Every property is set back to the way it was before the mistake was made. Crisis averted.
+Later, they find out that a mistake was indeed made. The vote was miscounted, and the results are now invalid. Thankfully, they have the backup. Rather than having to go through each individual property and set their values back to their original states, they can simply call the `restore(withKey:)` method. Every property is set back to the way it was before the mistake was made. Crisis averted.
 
 ```swift
 favorites.restore(withKey: "BackupResults")
@@ -61,7 +61,7 @@ class FavoriteFruits: RestorableObject {
 }
 ```
 
-This poses a problem, however, as computed properties don't support property wrappers. Now they can't mark their ranks as ``Restorable``. Then one of the judges, who read the manual, remembered that they can add computed properties to the ``RestorableObject/references-4bbzk`` array, and they will still be included in snapshots and restorations. Again, crisis averted.
+This poses a problem, however, as computed properties don't support property wrappers. Now they can't mark their ranks as `Restorable`. Then one of the judges, who read the documentation, remembered that they can add computed properties to the `references` array, and they will still be included in snapshots and restorations. Again, crisis averted.
 
 ```swift
 class FavoriteFruits: RestorableObject {
@@ -85,7 +85,7 @@ class FavoriteFruits: RestorableObject {
 }
 ```
 
-> The `name` parameter in the ``Reference`` type's initializer must be the same as the name of the property, or the property will not be saved.
+> The `name` parameter in the `Reference` type's initializer must be the same as the name of the property, or the property will not be saved.
 
 You can also access individual properties from a snapshot.
 
