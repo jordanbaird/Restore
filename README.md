@@ -10,6 +10,16 @@
 ![Swift Version](https://img.shields.io/badge/Swift-5.6%2B-orange)
 ![License](https://img.shields.io/github/license/jordanbaird/Restore)
 
+## Install
+
+Add the following dependency to your `Package.swift` file:
+
+```swift
+.package(url: "https://github.com/jordanbaird/Restore", from: "0.0.1")
+```
+
+## Usage
+
 [Read the full documentation here](https://jordanbaird.github.io/Restore/documentation/restore/)
 
 `Restore` is a convenient, easy to use package that allows you to take a snapshot of an object, and restore the object to the state it was in when the snapshot was taken. 
