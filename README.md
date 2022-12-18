@@ -4,7 +4,7 @@
     <br/>
 </div>
 
-![Build](https://img.shields.io/github/workflow/status/jordanbaird/Restore/Build)
+![Build](https://img.shields.io/github/actions/workflow/status/jordanbaird/Restore/test.yml?branch=main)
 [![Code Coverage](https://codecov.io/gh/jordanbaird/Restore/branch/main/graph/badge.svg?token=X5xATHinur)](https://codecov.io/gh/jordanbaird/Restore)
 ![Release](https://img.shields.io/github/v/release/jordanbaird/Restore)
 ![Swift Version](https://img.shields.io/badge/Swift-5.6%2B-orange)
