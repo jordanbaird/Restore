@@ -5,14 +5,13 @@ on:
 
 jobs:
   upload:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - name: Install Swift
-        uses: sersoft-gmbh/swifty-linux-action@v1.3.0
+      - uses: actions/checkout@v3
+      - name: Setup Swift 5.6
+        uses: swift-actions/setup-swift@v1.20.0
         with:
-          release-version: 5.6
-      - name: Checkout
-        uses: actions/checkout@v3
+          swift-version: "5.6"
       - name: Test
         run: swift test -v --enable-code-coverage
       - name: Generate Code Coverage
