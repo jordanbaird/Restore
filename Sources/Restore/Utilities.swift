@@ -7,14 +7,14 @@
 //===----------------------------------------------------------------------===//
 
 extension UInt64 {
-  static func random() -> Self {
-    .random(in: Self.min...Self.max)
-  }
+    static func random() -> Self {
+        .random(in: Self.min...Self.max)
+    }
 }
 
 extension ObjectIdentifier {
-  private class _BackingIdentifier { }
-  static func random() -> Self {
-    .init(_BackingIdentifier())
-  }
+    private class _BackingIdentifier { }
+    static func random() -> Self {
+        .init(_BackingIdentifier())
+    }
 }
