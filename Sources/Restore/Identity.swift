@@ -1,10 +1,7 @@
-//===----------------------------------------------------------------------===//
 //
-// Identifier.swift
+// Identity.swift
+// Restore
 //
-// Created: 2022. Author: Jordan Baird.
-//
-//===----------------------------------------------------------------------===//
 
 /// A type that identifies a ``RestorableObject`` instance.
 ///

@@ -1,10 +1,7 @@
-//===----------------------------------------------------------------------===//
 //
 // RestorationKey.swift
+// Restore
 //
-// Created: 2022. Author: Jordan Baird.
-//
-//===----------------------------------------------------------------------===//
 
 /// A type that is used as a key to store values in a snapshot.
 ///

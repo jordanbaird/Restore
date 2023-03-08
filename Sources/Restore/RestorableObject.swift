@@ -1,10 +1,7 @@
-//===----------------------------------------------------------------------===//
 //
-// Restorable.swift
+// RestorableObject.swift
+// Restore
 //
-// Created: 2022. Author: Jordan Baird.
-//
-//===----------------------------------------------------------------------===//
 
 var storage = [Identifier: [RestorationKey: AnySnapshot]]()
 

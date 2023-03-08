@@ -1,10 +1,7 @@
-//===----------------------------------------------------------------------===//
 //
 // Properties.swift
+// Restore
 //
-// Created: 2022. Author: Jordan Baird.
-//
-//===----------------------------------------------------------------------===//
 
 /// A container for the restorable properties owned by an instance of a
 /// ``RestorableObject`` type.
